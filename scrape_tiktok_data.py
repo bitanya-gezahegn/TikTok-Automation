@@ -22,7 +22,7 @@ def scrape_tiktok_data(request):
         })
 
    
-    google_apps_script_url = 'https://script.google.com/macros/s/AKfycbz9v9KVXYXI_oiJ_WnEt9H21tJxJQUECniVvRAdt86ftyrkdQx_0PPLHEAMVOx0pr45vw/exec'
+    google_apps_script_url = 'https://script.google.com/macros/s/AKfycbwzOlHZZw4g0Wjfg0CdcJnnXspz8DndP58Ienxdvq3HAyiOsSI2cTJdvcCA0haEZ4fpvQ/exec'
     response = requests.post(google_apps_script_url, json=tiktok_data)
 
     return f"Data sent with status: {response.status_code}"
