@@ -2,22 +2,34 @@ name: Scrape TikTok Data
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  
+    - cron: '0 * * * *'  
+  workflow_dispatch: 
+
 jobs:
-  scrape:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+    - name: Install dependencies
+      run: pip install TikTokApi
 
-      - name: Run the scraper
-        run: python scrape_tiktok_data.py
+    - name: Run Python script
+      run: python scrape_tiktok_data.py
+
+    - name: Upload JSON to GitHub Pages
+      run: |
+        git config --global user.email "bitanyagidey88@gmail.com"
+        git config --global user.name "bitanya-gezahegn"
+        mv tiktok_data.json docs/tiktok_data.json
+        git add docs/tiktok_data.json
+        git commit -m "Update TikTok data"
+        git push
+
