@@ -1,25 +1,26 @@
+import json
 from TikTokApi import TikTokApi
-import requests
 
-def scrape_tiktok_data(request):
-    api = TikTokApi()
-    username = "yenehealth" 
-    user_videos = api.user(username=username).videos(count=5)
+def scrape_tiktok_data():
+    api = TikTokApi.get_instance()
+    user = 'yenehealth' 
+    user_videos = api.by_username(user, count=10) 
 
-    tiktok_data = []
-
+    data = []
     for video in user_videos:
-        video_url = video.video_url
-        caption = video.caption
-        hashtags = ', '.join([tag.name for tag in video.hashtags])
-        upload_date = video.create_time
+        video_data = {
+            "video_url": f"https://www.tiktok.com/@{user}/video/{video['id']}",
+            "caption": video['desc'],
+            "hashtags": ' '.join([f"#{tag['name']}" for tag in video.get('textExtra', [])]),
+            "upload_date": video['createTime']
+        }
+        data.append(video_data)
 
-        tiktok_data.append({
-            'video_url': video_url,
-            'caption': caption,
-            'hashtags': hashtags,
-            'upload_date': upload_date,
-        })
+    with open('tiktok_data.json', 'w') as f:
+        json.dump(data, f)
+
+if __name__ == '__main__':
+    scrape_tiktok_data()
 
    
     google_apps_script_url = 'https://script.google.com/macros/s/AKfycbwzOlHZZw4g0Wjfg0CdcJnnXspz8DndP58Ienxdvq3HAyiOsSI2cTJdvcCA0haEZ4fpvQ/exec'
